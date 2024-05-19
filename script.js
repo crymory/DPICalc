@@ -1,7 +1,16 @@
-function calculateIdealSensitivity(initialSensitivity) {
-    let lowerSensitivity = initialSensitivity / Math.sqrt(2);
-    let baseSensitivity = initialSensitivity;
-    let higherSensitivity = initialSensitivity * Math.sqrt(2);
+function calculateIdealSensitivity(initialSensitivity, sensitivityType) {
+    let lowerSensitivity, baseSensitivity, higherSensitivity;
+    
+    if (sensitivityType === "lower") {
+        lowerSensitivity = initialSensitivity;
+        baseSensitivity = initialSensitivity * Math.sqrt(2);
+        higherSensitivity = initialSensitivity * Math.pow(Math.sqrt(2), 2);
+    } else {
+        lowerSensitivity = initialSensitivity / Math.pow(Math.sqrt(2), 2);
+        baseSensitivity = initialSensitivity / Math.sqrt(2);
+        higherSensitivity = initialSensitivity;
+    }
+
     let sensitivityTable = [];
 
     sensitivityTable.push({ iteration: 0, sensitivity: lowerSensitivity });
@@ -28,10 +37,13 @@ function calculateIdealSensitivity(initialSensitivity) {
 
 function calculateSensitivity() {
     let initialSensitivityInput = document.getElementById("initialSensitivity");
+    let sensitivityTypeSelect = document.getElementById("sensitivityType");
+    
     let initialSensitivity = parseFloat(initialSensitivityInput.value);
+    let sensitivityType = sensitivityTypeSelect.value;
 
     if (!isNaN(initialSensitivity)) {
-        let result = calculateIdealSensitivity(initialSensitivity);
+        let result = calculateIdealSensitivity(initialSensitivity, sensitivityType);
         let resultDiv = document.getElementById("result");
         resultDiv.innerHTML = `
             <h2>Results:</h2>
