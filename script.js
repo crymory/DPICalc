@@ -9,7 +9,7 @@ function calculatePSA() {
     let lower = startingSensitivity / 2;
     let upper = startingSensitivity * 2;
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 7; i++) {
         let mid = (lower + upper) / 2;
         results.push({
             iteration: i + 1,
