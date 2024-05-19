@@ -1,58 +1,55 @@
-function calculatePSA() {
-    let startingSensitivity = parseFloat(document.getElementById('startingSensitivity').value);
-    if (isNaN(startingSensitivity) || startingSensitivity <= 0) {
-        alert('Please enter a valid starting sensitivity.');
-        return;
+function calculateIdealSensitivity(initialSensitivity) {
+    let lowerSensitivity = initialSensitivity / Math.sqrt(2);
+    let baseSensitivity = initialSensitivity;
+    let higherSensitivity = initialSensitivity * Math.sqrt(2);
+    let sensitivityTable = [];
+
+    sensitivityTable.push({ iteration: 0, sensitivity: lowerSensitivity });
+    sensitivityTable.push({ iteration: 1, sensitivity: baseSensitivity });
+    sensitivityTable.push({ iteration: 2, sensitivity: higherSensitivity });
+
+    for (let i = 3; i < 7; i++) {
+        lowerSensitivity = (lowerSensitivity + baseSensitivity) / 2;
+        higherSensitivity = (baseSensitivity + higherSensitivity) / 2;
+
+        sensitivityTable.push({ iteration: i, sensitivity: lowerSensitivity });
+        sensitivityTable.push({ iteration: i + 1, sensitivity: baseSensitivity });
+        sensitivityTable.push({ iteration: i + 2, sensitivity: higherSensitivity });
+
+        i += 2;
     }
 
-    let iterations = parseInt(document.getElementById('iterations').value);
-
-    let results = [];
-    let lower = startingSensitivity / 2;
-    let upper = startingSensitivity * 2;
-
-    for (let i = 0; i < iterations; i++) {
-        let mid = (lower + upper) / 2;
-        results.push({
-            iteration: i + 1,
-            lower: lower.toFixed(2),
-            mid: mid.toFixed(2),
-            upper: upper.toFixed(2)
-        });
-
-        let userChoice = prompt(`Iteration ${i + 1}\nChoose:\n1. Lower (${lower.toFixed(2)})\n2. Mid (${mid.toFixed(2)})\n3. Upper (${upper.toFixed(2)})`);
-
-        if (userChoice == '1') {
-            upper = mid;
-        } else if (userChoice == '3') {
-            lower = mid;
-        } else {
-            lower = (lower + mid) / 2;
-            upper = (mid + upper) / 2;
-        }
-    }
-
-    displayResults(results);
-}
-
-function displayResults(results) {
-    let resultDiv = document.getElementById('result');
-    resultDiv.innerHTML = '<h2>PSA Calculation Results</h2>';
-    let table = document.createElement('table');
-    table.border = '1';
-    let headerRow = table.insertRow();
-    headerRow.insertCell().innerText = 'Iteration';
-    headerRow.insertCell().innerText = 'Lower';
-    headerRow.insertCell().innerText = 'Mid';
-    headerRow.insertCell().innerText = 'Upper';
-
-    results.forEach(result => {
-        let row = table.insertRow();
-        row.insertCell().innerText = result.iteration;
-        row.insertCell().innerText = result.lower;
-        row.insertCell().innerText = result.mid;
-        row.insertCell().innerText = result.upper;
+    let idealSensitivity = sensitivityTable.reduce((prev, curr) => {
+        return Math.abs(curr.sensitivity - 1) < Math.abs(prev.sensitivity - 1) ? curr : prev;
     });
 
-    resultDiv.appendChild(table);
+    return { sensitivityTable: sensitivityTable, idealSensitivity: idealSensitivity };
+}
+
+function calculateSensitivity() {
+    let initialSensitivityInput = document.getElementById("initialSensitivity");
+    let initialSensitivity = parseFloat(initialSensitivityInput.value);
+
+    if (!isNaN(initialSensitivity)) {
+        let result = calculateIdealSensitivity(initialSensitivity);
+        let resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = `
+            <h2>Results:</h2>
+            <table>
+                <tr>
+                    <th>Iteration</th>
+                    <th>Sensitivity</th>
+                </tr>
+                ${result.sensitivityTable.map(entry => `
+                    <tr>
+                        <td>${entry.iteration}</td>
+                        <td>${entry.sensitivity.toFixed(2)}</td>
+                    </tr>
+                `).join("")}
+            </table>
+            <p>Ideal Sensitivity: ${result.idealSensitivity.sensitivity.toFixed(2)}</p>
+        `;
+    } else {
+        alert("Please enter a valid initial sensitivity.");
+    }
 }
