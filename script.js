@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add iteration options dynamically
     for (let i = 1; i <= 7; i++) {
         const div = document.createElement("div");
+        div.classList.add('iteration');
+        div.style.display = i === 1 ? 'block' : 'none'; // Show only the first iteration initially
         div.innerHTML = `
             <label>Итерация ${i}:</label>
             <div>
@@ -39,12 +41,19 @@ function calculateSensitivity() {
         }
 
         const newRow = document.createElement('tr');
+        newRow.classList.add('result-row');
         newRow.innerHTML = `
             <td>${lowerSensitivity.toFixed(2)}</td>
             <td>${sensitivity.toFixed(2)}</td>
             <td>${higherSensitivity.toFixed(2)}</td>
         `;
         resultsBody.appendChild(newRow);
+
+        if (i < 7) {
+            // Show the next iteration options
+            const nextIterationDiv = document.querySelector(`.iteration:nth-child(${i + 1})`);
+            nextIterationDiv.style.display = 'block';
+        }
     }
 
     perfectSensitivity.textContent = `Perfect Sensitivity: ${sensitivity.toFixed(2)}`;
