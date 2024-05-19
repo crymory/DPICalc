@@ -1,64 +1,56 @@
-function calculateSensitivity() {
-    const startingSensitivity = parseFloat(document.getElementById('startingSensitivity').value);
-    const step = parseFloat(document.getElementById('step').value);
-    const iterations = parseInt(document.getElementById('iterations').value);
-    
-    let lowerSensitivity = startingSensitivity;
-    let higherSensitivity = startingSensitivity;
-    
-    const results = [];
-    for (let i = 1; i <= iterations; i++) {
-        const iteration = {
-            lower: lowerSensitivity,
-            base: startingSensitivity,
-            higher: higherSensitivity
-        };
-        
-        results.push(iteration);
-        
-        lowerSensitivity = calculateLowerSensitivity(startingSensitivity, step);
-        higherSensitivity = calculateHigherSensitivity(startingSensitivity, step);
+function calculatePSA() {
+    let startingSensitivity = parseFloat(document.getElementById('startingSensitivity').value);
+    if (isNaN(startingSensitivity) || startingSensitivity <= 0) {
+        alert('Please enter a valid starting sensitivity.');
+        return;
     }
-    
+
+    let results = [];
+    let lower = startingSensitivity / 2;
+    let upper = startingSensitivity * 2;
+
+    for (let i = 0; i < 5; i++) {
+        let mid = (lower + upper) / 2;
+        results.push({
+            iteration: i + 1,
+            lower: lower.toFixed(2),
+            mid: mid.toFixed(2),
+            upper: upper.toFixed(2)
+        });
+
+        let userChoice = prompt(`Iteration ${i + 1}\nChoose:\n1. Lower (${lower.toFixed(2)})\n2. Mid (${mid.toFixed(2)})\n3. Upper (${upper.toFixed(2)})`);
+
+        if (userChoice == '1') {
+            upper = mid;
+        } else if (userChoice == '3') {
+            lower = mid;
+        } else {
+            lower = (lower + mid) / 2;
+            upper = (mid + upper) / 2;
+        }
+    }
+
     displayResults(results);
-    
-    return false;
-}
-
-function calculateLowerSensitivity(baseSensitivity, step) {
-    return baseSensitivity - step;
-}
-
-function calculateHigherSensitivity(baseSensitivity, step) {
-    return baseSensitivity + step;
 }
 
 function displayResults(results) {
-    const resultsElement = document.getElementById('results');
-    resultsElement.innerHTML = '';
-    
-    const table = document.createElement('table');
-    table.borderCollapse = 'collapse';
-    table.width = '100%';
-    
-    const headerRow = table.insertRow();
-    const headerCells = ['Итерация', 'Lower', 'Base', 'Higher'];
-    for (const cellText of headerCells) {
-        const headerCell = headerRow.insertCell();
-        headerCell.textContent = cellText;
-    }
-    
-    for (const iteration of results) {
-        const row = table.insertRow();
-        const iterationCell = row.insertCell();
-        iterationCell.textContent = iteration.lower;
-        
-        const baseCell = row.insertCell();
-        baseCell.textContent = iteration.base;
-        
-        const higherCell = row.insertCell();
-        higherCell.textContent = iteration.higher;
-    }
-    
-    resultsElement.appendChild(table);
+    let resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = '<h2>PSA Calculation Results</h2>';
+    let table = document.createElement('table');
+    table.border = '1';
+    let headerRow = table.insertRow();
+    headerRow.insertCell().innerText = 'Iteration';
+    headerRow.insertCell().innerText = 'Lower';
+    headerRow.insertCell().innerText = 'Mid';
+    headerRow.insertCell().innerText = 'Upper';
+
+    results.forEach(result => {
+        let row = table.insertRow();
+        row.insertCell().innerText = result.iteration;
+        row.insertCell().innerText = result.lower;
+        row.insertCell().innerText = result.mid;
+        row.insertCell().innerText = result.upper;
+    });
+
+    resultDiv.appendChild(table);
 }
