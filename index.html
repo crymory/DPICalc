@@ -4,27 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Калькулятор чувствительности</title>
-    <style>
-        body {
-            font-family: sans-serif;
-        }
-        
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: center;
-        }
-        
-        input[type="number"] {
-            width: 100%;
-            padding: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Калькулятор чувствительности</h1>
@@ -56,72 +36,6 @@
     
     <div id="results"></div>
     
-    <script>
-        function calculateSensitivity() {
-            const startingSensitivity = parseFloat(document.getElementById('startingSensitivity').value);
-            const baseSensitivity = parseFloat(document.getElementById('baseSensitivity').value);
-            const step = parseFloat(document.getElementById('step').value);
-            const iterations = parseInt(document.getElementById('iterations').value);
-            
-            let lowerSensitivity = startingSensitivity;
-            let higherSensitivity = startingSensitivity;
-            
-            const results = [];
-            for (let i = 1; i <= iterations; i++) {
-                const iteration = {
-                    lower: lowerSensitivity,
-                    base: baseSensitivity,
-                    higher: higherSensitivity
-                };
-                
-                results.push(iteration);
-                
-                lowerSensitivity = calculateLowerSensitivity(baseSensitivity, step);
-                higherSensitivity = calculateHigherSensitivity(baseSensitivity, step);
-            }
-            
-            displayResults(results);
-            
-            return false;
-        }
-        
-        function calculateLowerSensitivity(baseSensitivity, step) {
-            return baseSensitivity - step;
-        }
-        
-        function calculateHigherSensitivity(baseSensitivity, step) {
-            return baseSensitivity + step;
-        }
-        
-        function displayResults(results) {
-            const resultsElement = document.getElementById('results');
-            resultsElement.innerHTML = '';
-            
-            const table = document.createElement('table');
-            table.borderCollapse = 'collapse';
-            table.width = '100%';
-            
-            const headerRow = table.insertRow();
-            const headerCells = ['Итерация', 'Lower', 'Base', 'Higher'];
-            for (const cellText of headerCells) {
-                const headerCell = headerRow.insertCell();
-                headerCell.textContent = cellText;
-            }
-            
-            for (const iteration of results) {
-                const row = table.insertRow();
-                const iterationCell = row.insertCell();
-                iterationCell.textContent = iteration.lower;
-                
-                const baseCell = row.insertCell();
-                baseCell.textContent = iteration.base;
-                
-                const higherCell = row.insertCell();
-                higherCell.textContent = iteration.higher;
-            }
-            
-            resultsElement.appendChild(table);
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
