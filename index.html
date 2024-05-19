@@ -12,15 +12,11 @@
             <h1>Настройка Сенсы</h1>
             <form id="settingsForm">
                 <div>
-                    <label for="baseSensitivity">Базовая сенса:</label>
+                    <label for="baseSensitivity">Начальная сенса:</label>
                     <input type="number" id="baseSensitivity" step="0.01" required>
                 </div>
-                <div>
-                    <label for="adjustment">Корректировка:</label>
-                    <select id="adjustment" required>
-                        <option value="increase">Увеличить</option>
-                        <option value="decrease">Уменьшить</option>
-                    </select>
+                <div id="iterations">
+                    <!-- Iteration options will be dynamically added here -->
                 </div>
                 <button type="button" onclick="calculateSensitivity()">Рассчитать</button>
             </form>
@@ -38,6 +34,7 @@
                 <tbody id="resultsBody">
                 </tbody>
             </table>
+            <p id="perfectSensitivity">Perfect Sensitivity: </p>
         </div>
     </div>
     <script src="script.js"></script>
