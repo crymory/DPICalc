@@ -1,61 +1,65 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const iterationsDiv = document.getElementById("iterations");
-
-    // Add iteration options dynamically
-    for (let i = 1; i <= 7; i++) {
-        const div = document.createElement("div");
-        div.classList.add('iteration');
-        div.style.display = i === 1 ? 'block' : 'none'; // Show only the first iteration initially
-        div.innerHTML = `
-            <label>Итерация ${i}:</label>
-            <div>
-                <input type="radio" id="iteration${i}Lower" name="iteration${i}" value="lower" required>
-                <label for="iteration${i}Lower">Lower</label>
-                <input type="radio" id="iteration${i}Higher" name="iteration${i}" value="higher">
-                <label for="iteration${i}Higher">Higher</label>
-            </div>
-        `;
-        iterationsDiv.appendChild(div);
-    }
-});
-
 function calculateSensitivity() {
+    const startingSensitivity = parseFloat(document.getElementById('startingSensitivity').value);
     const baseSensitivity = parseFloat(document.getElementById('baseSensitivity').value);
-    const resultsBody = document.getElementById('resultsBody');
-    const perfectSensitivity = document.getElementById('perfectSensitivity');
-    resultsBody.innerHTML = ""; // Clear previous results
-    let sensitivity = baseSensitivity;
-
-    let lowerSensitivity, higherSensitivity;
-
-    for (let i = 1; i <= 7; i++) {
-        const iteration = document.querySelector(`input[name="iteration${i}"]:checked`).value;
-
-        lowerSensitivity = sensitivity / 2;
-        higherSensitivity = sensitivity * 1.5;
-
-        if (iteration === "lower") {
-            sensitivity = lowerSensitivity;
-        } else {
-            sensitivity = higherSensitivity;
-        }
-
-        const newRow = document.createElement('tr');
-        newRow.classList.add('result-row');
-        newRow.style.setProperty('--animation-delay', `${i * 0.5}s`);
-        newRow.innerHTML = `
-            <td>${lowerSensitivity.toFixed(2)}</td>
-            <td>${sensitivity.toFixed(2)}</td>
-            <td>${higherSensitivity.toFixed(2)}</td>
-        `;
-        resultsBody.appendChild(newRow);
-
-        if (i < 7) {
-            // Show the next iteration options
-            const nextIterationDiv = document.querySelector(`.iteration:nth-child(${i + 1})`);
-            nextIterationDiv.style.display = 'block';
-        }
+    const step = parseFloat(document.getElementById('step').value);
+    const iterations = parseInt(document.getElementById('iterations').value);
+    
+    let lowerSensitivity = startingSensitivity;
+    let higherSensitivity = startingSensitivity;
+    
+    const results = [];
+    for (let i = 1; i <= iterations; i++) {
+        const iteration = {
+            lower: lowerSensitivity,
+            base: baseSensitivity,
+            higher: higherSensitivity
+        };
+        
+        results.push(iteration);
+        
+        lowerSensitivity = calculateLowerSensitivity(baseSensitivity, step);
+        higherSensitivity = calculateHigherSensitivity(baseSensitivity, step);
     }
+    
+    displayResults(results);
+    
+    return false;
+}
 
-    perfectSensitivity.textContent = `Perfect Sensitivity: ${sensitivity.toFixed(2)}`;
+function calculateLowerSensitivity(baseSensitivity, step) {
+    return baseSensitivity - step;
+}
+
+function calculateHigherSensitivity(baseSensitivity, step) {
+    return baseSensitivity + step;
+}
+
+function displayResults(results) {
+    const resultsElement = document.getElementById('results');
+    resultsElement.innerHTML = '';
+    
+    const table = document.createElement('table');
+    table.borderCollapse = 'collapse';
+    table.width = '100%';
+    
+    const headerRow = table.insertRow();
+    const headerCells = ['Итерация', 'Lower', 'Base', 'Higher'];
+    for (const cellText of headerCells) {
+        const headerCell = headerRow.insertCell();
+        headerCell.textContent = cellText;
+    }
+    
+    for (const iteration of results) {
+        const row = table.insertRow();
+        const iterationCell = row.insertCell();
+        iterationCell.textContent = iteration.lower;
+        
+        const baseCell = row.insertCell();
+        baseCell.textContent = iteration.base;
+        
+        const higherCell = row.insertCell();
+        higherCell.textContent = iteration.higher;
+    }
+    
+    resultsElement.appendChild(table);
 }
