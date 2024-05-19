@@ -5,11 +5,13 @@ function calculatePSA() {
         return;
     }
 
+    let iterations = parseInt(document.getElementById('iterations').value);
+
     let results = [];
     let lower = startingSensitivity / 2;
     let upper = startingSensitivity * 2;
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < iterations; i++) {
         let mid = (lower + upper) / 2;
         results.push({
             iteration: i + 1,
