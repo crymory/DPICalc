@@ -42,6 +42,7 @@ function calculateSensitivity() {
 
         const newRow = document.createElement('tr');
         newRow.classList.add('result-row');
+        newRow.style.setProperty('--animation-delay', `${i * 0.5}s`);
         newRow.innerHTML = `
             <td>${lowerSensitivity.toFixed(2)}</td>
             <td>${sensitivity.toFixed(2)}</td>
