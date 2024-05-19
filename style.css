@@ -42,7 +42,7 @@ label {
     font-weight: bold;
 }
 
-input {
+input, select {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -77,10 +77,4 @@ th, td {
 
 th {
     background-color: #f2f2f2;
-}
-
-#resultDPI {
-    font-size: 18px;
-    text-align: center;
-    margin-top: 20px;
 }
