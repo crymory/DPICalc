@@ -1,6 +1,5 @@
 function calculateSensitivity() {
     const startingSensitivity = parseFloat(document.getElementById('startingSensitivity').value);
-    const baseSensitivity = parseFloat(document.getElementById('baseSensitivity').value);
     const step = parseFloat(document.getElementById('step').value);
     const iterations = parseInt(document.getElementById('iterations').value);
     
@@ -11,14 +10,14 @@ function calculateSensitivity() {
     for (let i = 1; i <= iterations; i++) {
         const iteration = {
             lower: lowerSensitivity,
-            base: baseSensitivity,
+            base: startingSensitivity,
             higher: higherSensitivity
         };
         
         results.push(iteration);
         
-        lowerSensitivity = calculateLowerSensitivity(baseSensitivity, step);
-        higherSensitivity = calculateHigherSensitivity(baseSensitivity, step);
+        lowerSensitivity = calculateLowerSensitivity(startingSensitivity, step);
+        higherSensitivity = calculateHigherSensitivity(startingSensitivity, step);
     }
     
     displayResults(results);
