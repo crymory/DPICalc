@@ -24,21 +24,27 @@
                     <input type="number" id="diagonal" step="0.1" required>
                 </div>
                 <div>
-                    <label for="sensitivity">Сенса:</label>
-                    <input type="number" id="sensitivity" step="0.01" required>
+                    <label for="baseSensitivity">Базовая сенса:</label>
+                    <input type="number" id="baseSensitivity" step="0.01" required>
                 </div>
-                <button type="button" onclick="calculateSettings()">Рассчитать</button>
+                <div>
+                    <label for="adjustment">Корректировка:</label>
+                    <select id="adjustment" required>
+                        <option value="increase">Увеличить</option>
+                        <option value="decrease">Уменьшить</option>
+                    </select>
+                </div>
+                <button type="button" onclick="calculateSensitivity()">Рассчитать</button>
             </form>
         </div>
         <div class="right-panel">
             <h1>Результаты</h1>
-            <div id="resultDPI"></div>
             <table id="resultTable">
                 <thead>
                     <tr>
-                        <th>DPI</th>
-                        <th>Сенса</th>
-                        <th>Сенса * DPI</th>
+                        <th>Lower</th>
+                        <th>Base</th>
+                        <th>Higher</th>
                     </tr>
                 </thead>
                 <tbody id="resultsBody">
