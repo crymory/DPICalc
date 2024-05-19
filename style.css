@@ -1,3 +1,7 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
 .container {
     max-width: 600px;
     margin: 50px auto;
@@ -6,11 +10,39 @@
     border-radius: 5px;
 }
 
-.result {
-    margin-top: 20px;
+h1 {
+    text-align: center;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
 button {
+    display: block;
+    width: 100%;
+    padding: 10px;
     margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#result {
+    margin-top: 20px;
 }
