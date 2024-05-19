@@ -19,7 +19,7 @@ document.querySelector(".start-button").addEventListener("click", () => {
 
   // ベース感度空欄チェック
   if (baseSens == "") {
-    alert("ベース感度を入力してください");
+    alert("Введите базовую сенсу");
     return;
   }
 
@@ -114,11 +114,11 @@ document.querySelector(".high-button").addEventListener("click", () => {
 const calculationCheck = (a, b, newMiddle) => {
   if (calcMethodType == "easy") {
     if (Math.round((Number(a) - Number(b)) * 100) / 100 <= 0.01) {
-      alert(`あなたに最適な感度は${newMiddle.innerText}です`);
+      alert(`Ваша идеальная сенса: ${newMiddle.innerText}`);
     }
   } else if (calcMethodType == "detailed") {
     if (Math.round((Number(a) - Number(b)) * 1000) / 1000 <= 0.001) {
-      alert(`あなたに最適な感度は${newMiddle.innerText}です`);
+      alert(`Ваша идеальная сенса:${newMiddle.innerText}`);
     }
   }
 };
