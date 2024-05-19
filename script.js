@@ -1,30 +1,28 @@
-// 簡単計算モードと詳細計算モードどちらを選択しているかのフラグ
-let calcMethodType = "easy";
+// Флаг, указывающий выбранный режим расчета: "простой" или "подробный"
+let calcMethodType = "простой";
 
-// 開始ボタン押下時処理
+// Обработчик нажатия на кнопку "Начать"
 document.querySelector(".start-button").addEventListener("click", () => {
-  // 計算の元となるベース感度を取得
+  // Получаем базовую сенсу для расчета
   const baseSens = document.querySelector(".base-sens-input").value;
-  // 簡単計算モードと詳細計算モードのラジオボタンを取得
+  // Получаем радиокнопки для выбора режима расчета
   let calcMethod = document.querySelectorAll(".calc-mode-radio");
-  console.log(calcMethod);
 
-  // 簡単計算モードと詳細計算モードどちらを選択しているかを取得
+  // Определяем выбранный режим расчета
   for (let i = 0; i < calcMethod.length; i++) {
     if (calcMethod[i].checked) {
       calcMethodType = calcMethod[i].value;
-      console.log(calcMethodType);
     }
   }
 
-  // ベース感度空欄チェック
+  // Проверяем, что базовая сенса не пуста
   if (baseSens == "") {
-    alert("ベース感度を入力してください");
+    alert("Пожалуйста, введите базовую сенсу");
     return;
   }
 
   const tbody = document.querySelector(".table tbody");
-  // 開始ボタン押下で履歴リセット
+  // Очищаем таблицу перед началом новых расчетов
   while (tbody.firstChild) {
     tbody.removeChild(tbody.firstChild);
   }
@@ -34,11 +32,12 @@ document.querySelector(".start-button").addEventListener("click", () => {
   let middle = document.createElement("td");
   let low = document.createElement("td");
 
-  if (calcMethodType == "easy") {
+  // Выполняем расчет сенсы в зависимости от выбранного режима
+  if (calcMethodType == "простой") {
     high.innerText = Math.round(baseSens * 1.5 * 100) / 100;
     middle.innerText = baseSens * 1;
     low.innerText = Math.round(baseSens * 0.5 * 100) / 100;
-  } else if (calcMethodType == "detailed") {
+  } else if (calcMethodType == "подробный") {
     high.innerText = Math.round(baseSens * 1.5 * 1000) / 1000;
     middle.innerText = baseSens * 1;
     low.innerText = Math.round(baseSens * 0.5 * 1000) / 1000;
@@ -51,7 +50,7 @@ document.querySelector(".start-button").addEventListener("click", () => {
   tbody.appendChild(tr);
 });
 
-// ローボタン押下時処理
+// Обработчик нажатия на кнопку "Низкий"
 document.querySelector(".low-button").addEventListener("click", () => {
   const middle = document.querySelector(".table tbody").lastElementChild.children[1];
   const low = document.querySelector(".table tbody").lastElementChild.children[2];
@@ -60,9 +59,9 @@ document.querySelector(".low-button").addEventListener("click", () => {
   newHigh.innerText = middle.innerText;
 
   const newMiddle = document.createElement("td");
-  if (calcMethodType == "easy") {
+  if (calcMethodType == "простой") {
     newMiddle.innerText = Math.round(((Number(low.innerText) + Number(middle.innerText)) / 2) * 100) / 100;
-  } else if (calcMethodType == "detailed") {
+  } else if (calcMethodType == "подробный") {
     newMiddle.innerText = Math.round(((Number(low.innerText) + Number(middle.innerText)) / 2) * 1000) / 1000;
   }
 
@@ -81,15 +80,15 @@ document.querySelector(".low-button").addEventListener("click", () => {
   calculationCheck(newMiddle.innerText, newLow.innerText, newMiddle);
 });
 
-// ハイボタン押下時処理
+// Обработчик нажатия на кнопку "Высокий"
 document.querySelector(".high-button").addEventListener("click", () => {
   const high = document.querySelector(".table tbody").lastElementChild.children[0];
   const middle = document.querySelector(".table tbody").lastElementChild.children[1];
 
   const newMiddle = document.createElement("td");
-  if (calcMethodType == "easy") {
+  if (calcMethodType == "простой") {
     newMiddle.innerText = Math.round(((Number(middle.innerText) + Number(high.innerText)) / 2) * 100) / 100;
-  } else if (calcMethodType == "detailed") {
+  } else if (calcMethodType == "подробный") {
     newMiddle.innerText = Math.round(((Number(middle.innerText) + Number(high.innerText)) / 2) * 1000) / 1000;
   }
 
@@ -102,23 +101,24 @@ document.querySelector(".high-button").addEventListener("click", () => {
   const tbody = document.querySelector(".table tbody");
   const tr = document.createElement("tr");
 
-  tr.appendChild(newHigh);
-  tr.appendChild(newMiddle);
   tr.appendChild(newLow);
+  tr.appendChild(newMiddle);
+  tr.appendChild(newHigh);
 
   tbody.appendChild(tr);
 
   calculationCheck(newHigh.innerText, newMiddle.innerText, newMiddle);
 });
 
+// Функция для проверки условия завершения расчетов и вывода сообщения
 const calculationCheck = (a, b, newMiddle) => {
-  if (calcMethodType == "easy") {
+  if (calcMethodType == "простой") {
     if (Math.round((Number(a) - Number(b)) * 100) / 100 <= 0.01) {
-      alert(`あなたに最適な感度は${newMiddle.innerText}です`);
+      alert(`Ваша идеальная сенса: ${newMiddle.innerText}`);
     }
-  } else if (calcMethodType == "detailed") {
+  } else if (calcMethodType == "подробный") {
     if (Math.round((Number(a) - Number(b)) * 1000) / 1000 <= 0.001) {
-      alert(`あなたに最適な感度は${newMiddle.innerText}です`);
+      alert(`Ваша идеальная сенса: ${newMiddle.innerText}`);
     }
   }
 };
