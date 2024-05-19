@@ -1,17 +1,11 @@
 function calculateSensitivity() {
-    const width = parseFloat(document.getElementById('width').value);
-    const height = parseFloat(document.getElementById('height').value);
-    const diagonal = parseFloat(document.getElementById('diagonal').value);
     const baseSensitivity = parseFloat(document.getElementById('baseSensitivity').value);
     const adjustment = document.getElementById('adjustment').value;
 
-    if (!width || !height || !diagonal || !baseSensitivity || !adjustment) {
+    if (!baseSensitivity || !adjustment) {
         alert("Пожалуйста, введите все значения.");
         return;
     }
-
-    const diagonalPixels = Math.sqrt(width * width + height * height);
-    const dpi = diagonalPixels / diagonal;
 
     let lowerSensitivity, higherSensitivity;
 
