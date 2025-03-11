@@ -815,4 +815,14 @@
                         break;
                     case 'custom':
                         currentSensRange.max = 50;
-                        currentS
+currentSensRange.step = 1;
+break;
+}
+
+// Update range labels
+document.querySelector('#currentSensRange').nextElementSibling.children[1].textContent = currentSensRange.max;
+});
+
+// Initialize the table on page load
+renderTests();
+});
